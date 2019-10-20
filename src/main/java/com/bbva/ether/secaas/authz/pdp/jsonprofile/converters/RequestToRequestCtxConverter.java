@@ -14,11 +14,10 @@ import org.wso2.balana.ctx.xacml3.RequestCtx;
 import org.wso2.balana.xacml3.Attributes;
 
 import java.net.URI;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
@@ -67,14 +66,11 @@ public class RequestToRequestCtxConverter extends CustomConverter<Request, Abstr
 
     private org.wso2.balana.ctx.Attribute convertFromJsonAttributeToBalanaAttribute(Attribute attribute) {
         URI id = URI.create(attribute.getAttributeId());
-        List<AttributeValue> values = Stream.of(attribute.getValue())
-                .map(x -> loadAttributeValue(attribute.getDataType(),x))
-                .collect(toList());
-        URI type = values.stream()
-                    .findFirst()
-                    .map(AttributeValue::getType)
-                    .orElse(null);
-        return new org.wso2.balana.ctx.Attribute(id, type,null,null, values,false,3);
+        AttributeValue value = loadAttributeValue(attribute.getDataType(),attribute.getValue());
+        URI type = Optional.ofNullable(value)
+                .map(AttributeValue::getType)
+                .orElse(null);
+        return new org.wso2.balana.ctx.Attribute(id, type,null,null, singletonList(value),false,3);
     }
 
     private AttributeValue loadAttributeValue(String type, String value) {

@@ -21,6 +21,6 @@ public class Attribute {
     private boolean includedInResult = false;
 
     @JsonProperty("Value")
-    private String[] value = new String[0];
+    private String value;
 
 }
