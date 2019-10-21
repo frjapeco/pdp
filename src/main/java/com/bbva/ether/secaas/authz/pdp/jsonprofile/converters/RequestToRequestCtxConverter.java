@@ -14,11 +14,12 @@ import org.wso2.balana.ctx.xacml3.RequestCtx;
 import org.wso2.balana.xacml3.Attributes;
 
 import java.net.URI;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 public class RequestToRequestCtxConverter extends CustomConverter<Request, AbstractRequestCtx> {
