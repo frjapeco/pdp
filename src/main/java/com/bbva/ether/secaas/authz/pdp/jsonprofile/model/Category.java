@@ -8,11 +8,14 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Category {
 
-    @JsonProperty("Content")
-    private String content;
+    @JsonProperty("Id")
+    private String id;
 
     @JsonProperty("CategoryId")
     private String categoryId;
+
+    @JsonProperty("Content")
+    private String content;
 
     @JsonProperty("Attribute")
     private Attribute[] attribute = new Attribute[0];

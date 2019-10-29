@@ -7,12 +7,15 @@ import com.bbva.ether.secaas.authz.pdp.jsonprofile.model.SupportedDataTypes;
 import ma.glasnost.orika.CustomConverter;
 import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.metadata.Type;
+import org.w3c.dom.Element;
 import org.wso2.balana.attr.*;
 import org.wso2.balana.attr.xacml3.XPathAttribute;
 import org.wso2.balana.ctx.AbstractRequestCtx;
 import org.wso2.balana.ctx.xacml3.RequestCtx;
 import org.wso2.balana.xacml3.Attributes;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Optional;
@@ -58,11 +61,22 @@ public class RequestToRequestCtxConverter extends CustomConverter<Request, Abstr
     }
 
     private <T extends Category> org.wso2.balana.xacml3.Attributes convertCategoryToAttributes(T category) {
-        URI id = URI.create(category.getCategoryId());
+        String id = category.getId();
+        URI categoryId = URI.create(category.getCategoryId());
+        Element content = null;
+        try {
+             content = DocumentBuilderFactory
+                    .newInstance()
+                    .newDocumentBuilder()
+                    .parse(new ByteArrayInputStream(category.getContent().getBytes()))
+                    .getDocumentElement();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Set<org.wso2.balana.ctx.Attribute> attributesSet = Stream.of(category.getAttribute())
                 .map(this::convertFromJsonAttributeToBalanaAttribute)
                 .collect(toSet());
-        return new Attributes(id,attributesSet);
+        return new Attributes(categoryId, content, attributesSet, id);
     }
 
     private org.wso2.balana.ctx.Attribute convertFromJsonAttributeToBalanaAttribute(Attribute attribute) {

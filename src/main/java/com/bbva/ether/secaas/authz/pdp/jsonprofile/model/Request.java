@@ -23,6 +23,9 @@ public class Request {
     @JsonProperty("Action")
     private Action[] action = new Action[0];
 
+    @JsonProperty("Environment")
+    private Environment[] environment = new Environment[0];
+
     @JsonProperty("AccessSubject")
     private AccessSubject[] accessSubject = new AccessSubject[0];
 
