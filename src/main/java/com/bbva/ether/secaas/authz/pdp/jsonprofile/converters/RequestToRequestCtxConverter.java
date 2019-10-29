@@ -63,20 +63,26 @@ public class RequestToRequestCtxConverter extends CustomConverter<Request, Abstr
     private <T extends Category> org.wso2.balana.xacml3.Attributes convertCategoryToAttributes(T category) {
         String id = category.getId();
         URI categoryId = URI.create(category.getCategoryId());
-        Element content = null;
-        try {
-             content = DocumentBuilderFactory
-                    .newInstance()
-                    .newDocumentBuilder()
-                    .parse(new ByteArrayInputStream(category.getContent().getBytes()))
-                    .getDocumentElement();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Element content = Optional.ofNullable(category.getContent())
+                .map(this::convertStringToElement)
+                .orElse(null);
         Set<org.wso2.balana.ctx.Attribute> attributesSet = Stream.of(category.getAttribute())
                 .map(this::convertFromJsonAttributeToBalanaAttribute)
                 .collect(toSet());
         return new Attributes(categoryId, content, attributesSet, id);
+    }
+
+    private Element convertStringToElement(String content) {
+        try {
+            return DocumentBuilderFactory
+                    .newInstance()
+                    .newDocumentBuilder()
+                    .parse(new ByteArrayInputStream(content.getBytes()))
+                    .getDocumentElement();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private org.wso2.balana.ctx.Attribute convertFromJsonAttributeToBalanaAttribute(Attribute attribute) {
