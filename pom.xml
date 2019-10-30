@@ -14,6 +14,10 @@
         <version>2.1.9.RELEASE</version>
     </parent>
 
+    <properties>
+        <gatling.version>3.3.0</gatling.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -40,13 +44,54 @@
             <artifactId>orika-core</artifactId>
             <version>1.5.4</version>
         </dependency>
+        <dependency>
+            <groupId>io.gatling.highcharts</groupId>
+            <artifactId>gatling-charts-highcharts</artifactId>
+            <version>${gatling.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.gatling</groupId>
+            <artifactId>gatling-core</artifactId>
+            <version>${gatling.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>4.2.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <configuration>
+                            <jvmArgs>
+                                <jvmArg>-Xss100M</jvmArg>
+                            </jvmArgs>
+                            <args>
+                                <arg>-target:jvm-1.8</arg>
+                                <arg>-deprecation</arg>
+                                <arg>-feature</arg>
+                                <arg>-unchecked</arg>
+                                <arg>-language:implicitConversions</arg>
+                                <arg>-language:postfixOps</arg>
+                            </args>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.gatling</groupId>
+                <artifactId>gatling-maven-plugin</artifactId>
+                <version>3.0.3</version>
             </plugin>
         </plugins>
     </build>

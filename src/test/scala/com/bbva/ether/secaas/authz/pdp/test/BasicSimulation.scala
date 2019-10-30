@@ -1,22 +1,29 @@
 import io.gatling.core.Predef._
+import io.gatling.core.structure.{ChainBuilder, ScenarioBuilder}
 import io.gatling.http.Predef._
+import io.gatling.http.protocol.HttpProtocolBuilder
 
 class BasicSimulation extends Simulation {
 
-  val httpProtocol = http
+  val httpProtocol: HttpProtocolBuilder = http
     .baseUrl("http://localhost:8080")
-    .acceptHeader("application/json")
-  }
+    .contentTypeHeader("application/json")
 
-  object DecisionEndpoint {
+  object DecisionController {
 
-    val decisionEndpoint = exec(http("DecisionEndpoint")
+    val evaluate: ChainBuilder = exec(
+      http("DecisionEndpoint")
         .post("/api/v1/decision")
-        .body(StringBody("{}")))
+        .body(RawFileBody("payload.json")).asJson
+    )
+
   }
 
-  val sampleScenario = scenario("MyScenario").exec(DecisionEndpoint.decisionEndpoint)
+  val sampleScenario: ScenarioBuilder = scenario("sampleScenario").exec(DecisionController.evaluate)
 
-
+  setUp(
+    sampleScenario.inject(atOnceUsers(100))
+      .protocols(httpProtocol)
+  )
 
 }
