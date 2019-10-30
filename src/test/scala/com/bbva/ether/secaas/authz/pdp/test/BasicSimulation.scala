@@ -22,7 +22,7 @@ class BasicSimulation extends Simulation {
   val sampleScenario: ScenarioBuilder = scenario("sampleScenario").exec(DecisionController.evaluate)
 
   setUp(
-    sampleScenario.inject(atOnceUsers(100))
+    sampleScenario.inject(atOnceUsers(1000))
       .protocols(httpProtocol)
   )
 
