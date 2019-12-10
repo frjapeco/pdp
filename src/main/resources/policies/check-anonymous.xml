@@ -1,0 +1,43 @@
+<Policy xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
+        PolicyId="check-anonymous-policy"
+        RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-unless-permit"
+        Version="1.0">
+    <Target>
+        <AnyOf>
+            <AllOf>
+                <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-regexp-match">
+                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">^/bbva/anonymous(/.*)?$</AttributeValue>
+                    <AttributeDesignator MustBePresent="true"
+                                         Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                                         AttributeId="resource-id"
+                                         DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                </Match>
+            </AllOf>
+        </AnyOf>
+    </Target>
+    <Rule RuleId="check-subject" Effect="Permit">
+        <Condition>
+            <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">anonymous@bbva.com</AttributeValue>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
+                    <AttributeDesignator Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+                                         AttributeId="urn:oasis:names:tc:xacml:1.0:subject:subject-id"
+                                         DataType="http://www.w3.org/2001/XMLSchema#string"
+                                         MustBePresent="true" />
+                </Apply>
+            </Apply>
+        </Condition>
+    </Rule>
+    <AdviceExpressions>
+        <AdviceExpression AdviceId="permit-advice" AppliesTo="Permit">
+            <AttributeAssignmentExpression AttributeId="permit-advice">
+                <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">You have been authorized to use this resource!</AttributeValue>
+            </AttributeAssignmentExpression>
+        </AdviceExpression>
+        <AdviceExpression AdviceId="deny-advice" AppliesTo="Deny">
+            <AttributeAssignmentExpression AttributeId="deny-advice">
+                <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">You are unauthorized to use this resource!</AttributeValue>
+            </AttributeAssignmentExpression>
+        </AdviceExpression>
+    </AdviceExpressions>
+</Policy>

@@ -1,0 +1,2 @@
+balana:
+  policies.location: ./src/main/resources/policies
