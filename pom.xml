@@ -24,6 +24,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.wso2.balana</groupId>
             <artifactId>org.wso2.balana</artifactId>
             <version>1.1.12</version>

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wso2.balana.PDP;
 import org.wso2.balana.ctx.AbstractRequestCtx;
-import org.wso2.balana.ctx.ResponseCtx;
+import reactor.core.publisher.Mono;
 
 @Service
 public class DecisionService {
@@ -18,10 +18,11 @@ public class DecisionService {
     @Autowired
     private MapperFacade mapper;
 
-    public Result[] evaluate(Request request) {
+    public Mono<Result[]> evaluate(Request request) {
         AbstractRequestCtx requestCtx = mapper.map(request, AbstractRequestCtx.class);
-        ResponseCtx responseCtx = pdp.evaluate(requestCtx);
-        return mapper.map(responseCtx, Result[].class);
+        // TODO: refactor this code when RxBalana is implemented
+        return Mono.just(pdp.evaluate(requestCtx))
+                .map(x -> mapper.map(x, Result[].class));
     }
 
 }

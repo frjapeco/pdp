@@ -2,7 +2,8 @@
         PolicyId="check-user-policy"
         RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-unless-permit"
         Version="1.0">
-    <Target>
+    <Target />
+    <!-- <Target>
         <AnyOf>
             <AllOf>
                 <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-regexp-match">
@@ -14,7 +15,7 @@
                 </Match>
             </AllOf>
         </AnyOf>
-    </Target>
+    </Target> -->
     <Rule RuleId="check-subject" Effect="Permit">
         <Condition>
             <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
