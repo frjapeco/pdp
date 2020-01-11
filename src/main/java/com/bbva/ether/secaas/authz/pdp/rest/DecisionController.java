@@ -19,8 +19,7 @@ public class DecisionController {
 
     @PostMapping
     public Mono<DecisionResponse> evaluate(@RequestBody DecisionRequest request) {
-        return decisionService.evaluate(request.getRequest())
-                .map(x -> DecisionResponse.builder().response(x).build());
+        return decisionService.evaluate(request.getRequest()).map(x -> DecisionResponse.builder().response(x).build());
     }
 
 }

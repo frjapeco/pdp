@@ -9,6 +9,10 @@ import java.net.URI;
 
 public class CustomAttributeFinder extends AttributeFinderModule {
 
+    public boolean isDesignatorSupported() {
+        return true;
+    }
+
     public EvaluationResult findAttribute(URI attributeType, URI attributeId, String issuer, URI category, EvaluationCtx context) {
         return new EvaluationResult(BagAttribute.createEmptyBag(attributeType));
     }

@@ -1,2 +1,2 @@
 balana:
-  policies.location: /target/classes/policies
+  policies.location: /home/javier-costas/projects/bbva-authz/pdp/src/main/resources/policies
